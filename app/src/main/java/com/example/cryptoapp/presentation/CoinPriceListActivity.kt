@@ -2,7 +2,6 @@ package com.example.cryptoapp.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.cryptoapp.R
 import com.example.cryptoapp.databinding.ActivityCoinPriceListBinding
@@ -27,14 +26,25 @@ class CoinPriceListActivity : AppCompatActivity() {
                     this@CoinPriceListActivity,
                     coinInfo.fromSymbol
                 )
+
                 startActivity(intent)
+
+//                supportFragmentManager.beginTransaction()
+//                    .addToBackStack(null)
+//                    .replace(
+//                        R.id.coin_detail_fragment_container,
+//                        CoinDetailFragment.newInstance(coinInfo.fromSymbol)
+//                    )
+//                    .commit()
             }
         }
+
         binding.rvCoinPriceList.adapter = adapter
+        binding.rvCoinPriceList.itemAnimator = null // убирает анимацию у элемонов рв
         viewModel = ViewModelProvider(this)[CoinViewModel::class.java]
         viewModel.priceList.observe(this) {
-//            adapter.submitList(it)
-            adapter.coinInfoList = it
+            adapter.submitList(it)
+//            adapter.coinInfoList = it
         }
     }
 }

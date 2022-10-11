@@ -13,14 +13,14 @@ import com.squareup.picasso.Picasso
 
 class CoinInfoAdapter(
     private val context: Context
-) : RecyclerView.Adapter<CoinInfoViewHolder>() {
-//    ) : ListAdapter<CoinInfo, CoinInfoViewHolder>(CoinItemDiffCallback()) {
+//) : RecyclerView.Adapter<CoinInfoViewHolder>() {
+    ) : ListAdapter<CoinInfo, CoinInfoViewHolder>(CoinItemDiffCallback()) {
 
-    var coinInfoList: List<CoinInfo> = listOf()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+//    var coinInfoList: List<CoinInfo> = listOf()
+//        set(value) {
+//            field = value
+//            notifyDataSetChanged()
+//        }
 
     var onCoinClickListener: OnCoinClickListener? = null
 
@@ -34,11 +34,11 @@ class CoinInfoAdapter(
         return CoinInfoViewHolder(binding)
     }
 
-    override fun getItemCount() = coinInfoList.size
+//    override fun getItemCount() = coinInfoList.size
 
     override fun onBindViewHolder(holder: CoinInfoViewHolder, position: Int) {
-//        val coin = currentList[position]
-        val coin = coinInfoList[position]
+        val coin = currentList[position]
+//        val coin = coinInfoList[position]
 
         with(holder.binding) {
             with(coin) {
