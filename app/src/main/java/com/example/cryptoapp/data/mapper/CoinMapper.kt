@@ -1,11 +1,15 @@
 package com.example.cryptoapp.data.mapper
 
 import com.example.cryptoapp.data.database.CoinInfoDbModel
+import com.example.cryptoapp.data.network.ApiFactory
 import com.example.cryptoapp.data.network.model.CoinInfoDto
 import com.example.cryptoapp.data.network.model.CoinInfoJsonContainerDto
 import com.example.cryptoapp.data.network.model.CoinNamesListDto
 import com.example.cryptoapp.domain.entities.CoinInfo
 import com.google.gson.Gson
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.util.*
 
 class CoinMapper {
 
@@ -17,29 +21,18 @@ class CoinMapper {
         lastMarket = dto.lastMarket,
         highDay = dto.highDay,
         lowDay = dto.lowDay,
-        imageUrl = dto.imageUrl
+        imageUrl = BASE_IMAGE_URL + dto.imageUrl
     )
 
     fun mapDbModelToEntity(model: CoinInfoDbModel): CoinInfo = CoinInfo(
         fromSymbol = model.fromSymbol,
         toSymbol = model.toSymbol,
         price = model.price,
-        lastUpdate = model.lastUpdate,
+        lastUpdate = convertTimestampToTime(model.lastUpdate),
         lastMarket = model.lastMarket,
         highDay = model.highDay,
         lowDay = model.lowDay,
         imageUrl = model.imageUrl
-    )
-
-    fun mapEntityToDbModel(entity: CoinInfo): CoinInfoDbModel = CoinInfoDbModel(
-        fromSymbol = entity.fromSymbol,
-        toSymbol = entity.toSymbol,
-        price = entity.price,
-        lastUpdate = entity.lastUpdate,
-        lastMarket = entity.lastMarket,
-        highDay = entity.highDay,
-        lowDay = entity.lowDay,
-        imageUrl = entity.imageUrl
     )
 
     fun mapJsonContainerToListCoinInfo(jsonContainer: CoinInfoJsonContainerDto): List<CoinInfoDto> {
@@ -66,5 +59,20 @@ class CoinMapper {
         }?.joinToString(",") ?: ""
     }
 
+    private fun convertTimestampToTime(timestamp: Long?): String {
+        if (timestamp == null) return ""
+        val stamp = Timestamp(timestamp * 1000)
+        val date = Date(stamp.time)
+        val pattern = "HH:mm:ss"
+        val sdf = SimpleDateFormat(pattern, Locale.getDefault())
+        sdf.timeZone = TimeZone.getDefault()
+        return sdf.format(date)
+    }
+
+
+    companion object {
+
+        const val BASE_IMAGE_URL = "https://cryptocompare.com"
+    }
 
 }
