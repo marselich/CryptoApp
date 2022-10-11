@@ -1,4 +1,4 @@
-package com.example.cryptoapp.api
+package com.example.cryptoapp.data.network
 
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -16,4 +16,5 @@ object ApiFactory {
         .build()
 
     val apiService = retrofit.create(ApiService::class.java)
+
 }
