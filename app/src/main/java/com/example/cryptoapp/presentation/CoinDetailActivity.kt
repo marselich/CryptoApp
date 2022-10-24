@@ -4,11 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.example.cryptoapp.R
 import com.example.cryptoapp.databinding.ActivityCoinDetailBinding
-import com.squareup.picasso.Picasso
+import javax.inject.Inject
 
 class CoinDetailActivity : AppCompatActivity() {
 
@@ -30,9 +28,17 @@ class CoinDetailActivity : AppCompatActivity() {
                     R.id.coin_detail_fragment_container,
                     CoinDetailFragment.newInstance(fromSymbol)
                 )
+//                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+//                .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                 .commit()
         }
 
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right)
     }
 
     companion object {

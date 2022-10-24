@@ -7,6 +7,7 @@ import com.example.cryptoapp.R
 import com.example.cryptoapp.databinding.ActivityCoinPriceListBinding
 import com.example.cryptoapp.presentation.adapters.CoinInfoAdapter
 import com.example.cryptoapp.domain.entities.CoinInfo
+import javax.inject.Inject
 
 class CoinPriceListActivity : AppCompatActivity() {
 
@@ -14,9 +15,20 @@ class CoinPriceListActivity : AppCompatActivity() {
         ActivityCoinPriceListBinding.inflate(layoutInflater)
     }
 
-    private lateinit var viewModel: CoinViewModel
+    @Inject
+    lateinit var coinViewModelFactory: CoinViewModelFactory
+
+    private val viewModel by lazy {
+        ViewModelProvider(this, coinViewModelFactory)[CoinViewModel::class.java]
+    }
+
+    private val component by lazy {
+        (application as CryptoApplication).component
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        component.inject(this)
+
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         val adapter = CoinInfoAdapter(this)
@@ -27,14 +39,11 @@ class CoinPriceListActivity : AppCompatActivity() {
                 } else {
                     launchDetailFragment(coinInfo.fromSymbol)
                 }
-
-
             }
         }
 
         binding.rvCoinPriceList.adapter = adapter
         binding.rvCoinPriceList.itemAnimator = null // убирает анимацию у элемонов рв
-        viewModel = ViewModelProvider(this)[CoinViewModel::class.java]
         viewModel.priceList.observe(this) {
             adapter.submitList(it)
 //            adapter.coinInfoList = it
@@ -49,7 +58,9 @@ class CoinPriceListActivity : AppCompatActivity() {
             fromSymbol
         )
         startActivity(intent)
+        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right)
     }
+
 
     private fun launchDetailFragment(fromSymbol: String) {
         supportFragmentManager.popBackStack()

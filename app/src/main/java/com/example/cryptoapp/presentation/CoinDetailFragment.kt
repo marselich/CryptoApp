@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.cryptoapp.databinding.FragmentCoinDetailBinding
 import com.squareup.picasso.Picasso
+import javax.inject.Inject
 
 class CoinDetailFragment : Fragment() {
 
@@ -17,8 +18,20 @@ class CoinDetailFragment : Fragment() {
     private val binding: FragmentCoinDetailBinding
         get() = _binding!!
 
+    @Inject
+    lateinit var viewModelFactory: CoinViewModelFactory
+
     private val viewModel: CoinViewModel by lazy {
-        ViewModelProvider(requireActivity())[CoinViewModel::class.java]
+        ViewModelProvider(requireActivity(), viewModelFactory)[CoinViewModel::class.java]
+    }
+
+    private val component by lazy {
+        (requireActivity().application as CryptoApplication).component
+    }
+
+    override fun onAttach(context: Context) {
+        component.inject(this)
+        super.onAttach(context)
     }
 
     override fun onCreateView(
@@ -58,6 +71,7 @@ class CoinDetailFragment : Fragment() {
 
 
     }
+
 
 
     override fun onDestroyView() {
